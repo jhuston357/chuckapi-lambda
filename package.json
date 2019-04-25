@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon index.js"
   },
   "repository": {
     "type": "git",
@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/jhuston357/chuckapi-lambda#readme",
   "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
     "mysql": "^2.17.1"
   }
 }

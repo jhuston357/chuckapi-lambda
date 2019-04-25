@@ -1,4 +1,13 @@
 const mysql = require("mysql");
+const express = require("express");
+const bp = require("body-parser");
+const app = express();
+
+const port = 8000;
+
+app.listen(port, () => {
+  console.log("port");
+});
 
 console.log("START");
 
@@ -17,5 +26,6 @@ con.connect(function(err) {
   con.query("SELECT * FROM chuckquotes", function(err, result, fields) {
     if (err) throw err;
     console.log(result);
+    con.end();
   });
 });
