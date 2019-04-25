@@ -5,12 +5,6 @@ const app = express();
 
 const port = 8000;
 
-app.listen(port, () => {
-  console.log("port");
-});
-
-console.log("START");
-
 var con = mysql.createConnection({
   host: "chuckquotedb.cuymv9bh0vjd.us-east-2.rds.amazonaws.com",
   user: "afknscientist",
@@ -19,13 +13,32 @@ var con = mysql.createConnection({
   port: 3310
 });
 
-con.connect(function(err) {
-  if (err) console.log(err);
-  console.log("Connected!");
+app.listen(port, () => {
+  console.log("port");
+});
 
-  con.query("SELECT * FROM chuckquotes", function(err, result, fields) {
+app.get("/api/chuckquotes", (req, res) => {
+  con.connect(function(err) {
+    if (err) console.log(err);
+    console.log("Connected!");
+
+    con.query("SELECT * FROM chuckquotes", function(err, result, fields) {
+      if (err) res.send(err);
+      res.send(result);
+      con.end();
+    });
+  });
+});
+
+app.post("/api/addquote", (req, res) => {
+  con.connect(function(err) {
     if (err) throw err;
-    console.log(result);
-    con.end();
+
+    var sql =
+      "INSERT INTO chuckquotes (QuoteDate,ChuckQuote,EnteredBy) VALUES (res.QuoteDate,res.ChuckQuote,res.EnteredBy)";
+    con.query(sql, function(err, result) {
+      if (err) throw err;
+      console.log("1 record inserted");
+    });
   });
 });
