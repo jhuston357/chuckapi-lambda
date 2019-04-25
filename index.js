@@ -36,7 +36,7 @@ app.get("/api/chuck/:ID", (req, res) => {
   });
 });
 
-app.post("/api/add", (req, res) => {
+app.post("/api/chuck", (req, res) => {
   var sql =
     "INSERT INTO chuckquotes (QuoteDate,ChuckQuote,EnteredBy) VALUES('" +
     req.body.QuoteDate +
