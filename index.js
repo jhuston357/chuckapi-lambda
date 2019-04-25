@@ -20,8 +20,10 @@ app.listen(port, () => {
 
 app.get("/api/chucks", (req, res) => {
   var sql = "SELECT * FROM chuckquotes";
+  console.log("test1");
   sqlpool.query(sql, function(err, result, fields) {
     if (err) res.send(err);
+    console.log("test2");
     res.send(result);
   });
 });
