@@ -1,11 +1,12 @@
 const mysql = require("mysql");
 const express = require("express");
-const bp = require("body-parser");
+
 const app = express();
+app.use(express.json());
 
 const port = 8000;
 
-var con = mysql.createConnection({
+var sqlpool = mysql.createPool({
   host: "chuckquotedb.cuymv9bh0vjd.us-east-2.rds.amazonaws.com",
   user: "afknscientist",
   password: "ThUnDoEx2748$",
@@ -14,31 +15,61 @@ var con = mysql.createConnection({
 });
 
 app.listen(port, () => {
-  console.log("port");
+  console.log(port);
 });
 
-app.get("/api/chuckquotes", (req, res) => {
-  con.connect(function(err) {
-    if (err) console.log(err);
-    console.log("Connected!");
-
-    con.query("SELECT * FROM chuckquotes", function(err, result, fields) {
-      if (err) res.send(err);
-      res.send(result);
-      con.end();
-    });
+app.get("/api/chucks", (req, res) => {
+  var sql = "SELECT * FROM chuckquotes";
+  sqlpool.query(sql, function(err, result, fields) {
+    if (err) res.send(err);
+    res.send(result);
   });
 });
 
-app.post("/api/addquote", (req, res) => {
-  con.connect(function(err) {
-    if (err) throw err;
+app.get("/api/chuck/:ID", (req, res) => {
+  var sql = "SELECT * FROM chuckquotes WHERE ID='" + req.params.ID + "'";
+  sqlpool.query(sql, function(err, result, fields) {
+    if (err) res.send(err);
+    res.send(result);
+  });
+});
 
-    var sql =
-      "INSERT INTO chuckquotes (QuoteDate,ChuckQuote,EnteredBy) VALUES (res.QuoteDate,res.ChuckQuote,res.EnteredBy)";
-    con.query(sql, function(err, result) {
-      if (err) throw err;
-      console.log("1 record inserted");
-    });
+app.post("/api/add", (req, res) => {
+  var sql =
+    "INSERT INTO chuckquotes (QuoteDate,ChuckQuote,EnteredBy) VALUES('" +
+    req.body.QuoteDate +
+    "','" +
+    req.body.ChuckQuote +
+    "','" +
+    req.body.EnteredBy +
+    "')";
+  sqlpool.query(sql, function(err, result) {
+    if (err) res.send(err);
+    res.send("1recordadded");
+  });
+});
+
+app.put("/api/edit/:ID", (req, res) => {
+  var sql =
+    "UPDATE chuckquotes SET QuoteDate = '" +
+    req.body.QuoteDate +
+    "',ChuckQuote= '" +
+    req.body.ChuckQuote +
+    "',EnteredBy= '" +
+    req.body.EnteredBy +
+    "' WHERE ID='" +
+    req.params.ID +
+    "'";
+  sqlpool.query(sql, function(err, result, fields) {
+    if (err) res.send(err);
+    res.send(result);
+  });
+});
+
+app.delete("/api/chuck/:ID", (req, res) => {
+  var sql = "DELETE FROM chuckquotes WHERE ID='" + req.params.ID + "'";
+  sqlpool.query(sql, function(err, result, fields) {
+    if (err) res.send(err);
+    res.send(result);
   });
 });
