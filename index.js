@@ -4,7 +4,7 @@ const express = require("express");
 const app = express();
 app.use(express.json());
 
-const port = 8000;
+const port = 80;
 
 var sqlpool = mysql.createPool({
   host: "chuckquotedb.cuymv9bh0vjd.us-east-2.rds.amazonaws.com",
