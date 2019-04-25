@@ -51,7 +51,7 @@ app.post("/api/add", (req, res) => {
   });
 });
 
-app.put("/api/edit/:ID", (req, res) => {
+app.put("/api/chuck/:ID", (req, res) => {
   var sql =
     "UPDATE chuckquotes SET QuoteDate = '" +
     req.body.QuoteDate +
