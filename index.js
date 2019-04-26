@@ -18,6 +18,11 @@ app.listen(port, () => {
   console.log(port);
 });
 
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  next();
+});
+
 app.get("/api/chucks", (req, res) => {
   var sql = "SELECT * FROM chuckquotes";
   sqlpool.query(sql, function(err, result, fields) {
