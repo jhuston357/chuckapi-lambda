@@ -1,6 +1,8 @@
 const mysql = require("mysql");
 const express = require("express");
-
+var fs = require("fs");
+var https = require("https");
+var http = require("http");
 const app = express();
 app.use(express.json());
 
@@ -14,16 +16,20 @@ var sqlpool = mysql.createPool({
   port: 3310
 });
 
-app.listen(port, () => {
-  console.log(port);
-});
+var sslOptions = {
+  key: fs.readFileSync("key.pem"),
+  cert: fs.readFileSync("cert.pem"),
+  passphrase: "ThUnDoEx2748$"
+};
+
+https.createServer(sslOptions, app).listen(443);
+http.createServer(app).listen(port);
+//app.listen(port);
 
 app.get("/api/chucks", (req, res) => {
   var sql = "SELECT * FROM chuckquotes";
-  console.log("test1");
   sqlpool.query(sql, function(err, result, fields) {
     if (err) res.send(err);
-    console.log("test2");
     res.send(result);
   });
 });
