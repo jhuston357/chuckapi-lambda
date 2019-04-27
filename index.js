@@ -26,6 +26,11 @@ https.createServer(sslOptions, app).listen(443);
 http.createServer(app).listen(port);
 //app.listen(port);
 
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  next();
+});
+
 app.get("/api/chucks", (req, res) => {
   var sql = "SELECT * FROM chuckquotes";
   sqlpool.query(sql, function(err, result, fields) {
@@ -42,7 +47,7 @@ app.get("/api/chuck/:ID", (req, res) => {
   });
 });
 
-app.post("/api/add", (req, res) => {
+app.post("/api/chuck", (req, res) => {
   var sql =
     "INSERT INTO chuckquotes (QuoteDate,ChuckQuote,EnteredBy) VALUES('" +
     req.body.QuoteDate +
@@ -57,7 +62,7 @@ app.post("/api/add", (req, res) => {
   });
 });
 
-app.put("/api/edit/:ID", (req, res) => {
+app.put("/api/chuck/:ID", (req, res) => {
   var sql =
     "UPDATE chuckquotes SET QuoteDate = '" +
     req.body.QuoteDate +
