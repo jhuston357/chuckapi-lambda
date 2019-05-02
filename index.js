@@ -16,13 +16,6 @@ var sqlpool = mysql.createPool({
   port: 3310
 });
 
-var sslOptions = {
-  key: fs.readFileSync("key.pem"),
-  cert: fs.readFileSync("cert.pem"),
-  passphrase: "ThUnDoEx2748$"
-};
-
-https.createServer(sslOptions, app).listen(443);
 http.createServer(app).listen(port);
 //app.listen(port);
 
